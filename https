@@ -1,0 +1,8 @@
+Eureka: http://localhost:8761
+
+Gateway: http://localhost:8080
+
+Config: https://localhost:8888
+ 
+Usuario: https://localhost:8090
+	
