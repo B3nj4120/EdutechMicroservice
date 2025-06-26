@@ -9,13 +9,13 @@ import java.util.Optional;
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
     //Buscar un usuario por su nombre de usuario
-    Optional<Usuario> findByusername(String username);
+    Optional<Usuario> findByUsername(String username);
 
     //buscar usuario por correo
     Optional<Usuario> findBYEmail(String email);
 
     //validar si ya existe un usuario con ese nombre
-    boolean existsByusername(String username);
+    boolean existsByUsername(String username);
 
     //validar si ya existe un correo registrado
     boolean existByEmail(String email);

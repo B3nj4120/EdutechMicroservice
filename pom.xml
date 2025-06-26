@@ -33,8 +33,8 @@
 
   <dependency>
     <groupId>net.datafaker</groupId>
-    <artifactId>datafaker</artifactId>
-    <version>2.4.2</version>
+			<artifactId>datafaker</artifactId>
+			<version>2.3.0</version>
 </dependency>
 
 
