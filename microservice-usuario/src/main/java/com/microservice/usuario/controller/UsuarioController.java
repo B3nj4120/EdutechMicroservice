@@ -22,23 +22,19 @@ public class UsuarioController {
      @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/listar")
-    public List<Usuario> listar() {
-        return usuarioService.findAll();
+    // Obtener lista de todos los usuarios
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        return ResponseEntity.ok(usuarioService.findAll());
     }
 
+    // Obtener un usuario por ID
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerPorId(@PathVariable int id) {
-        Optional<Usuario> usuario = usuarioService.findById(id);
-
-        if (usuario.isPresent()) {
-            return ResponseEntity.ok(usuario.get());
-        } else {
-            Map<String, String> error = new HashMap<>();
-            error.put("message", "Usuario no encontrado con ID: " + id);
-            error.put("timestamp", LocalDateTime.now().toString());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-        }
+        return usuarioService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "Usuario no encontrado")));
     }
 
     @PostMapping
