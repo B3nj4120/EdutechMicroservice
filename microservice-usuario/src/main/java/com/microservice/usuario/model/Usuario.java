@@ -16,22 +16,24 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "username", unique = true, nullable = false, length = 50)
     @NotBlank(message = "El nombre de usuario es obligatorio")
-    @Column(nullable = false, unique = true)
+    @Size(min = 4, max = 50, message = "El nombre de usuario debe tener entre 4 y 50 caracteres")
     private String username;
 
+    @Column(name = "password", nullable = false)
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
-    @Column(nullable = false)
     private String password;
 
-    @Email(message = "El correo debe ser válido")
+    @Column(name = "email", nullable = false, unique = true)
     @NotBlank(message = "El correo es obligatorio")
-    @Column(nullable = false, unique = true)
+    @Email(message = "El formato del correo no es válido")
     private String email;
 
+    @Column(name = "rol", nullable = false)
     @NotBlank(message = "El rol es obligatorio")
-    @Column(nullable = false)
     private String rol;
 
 }
+    

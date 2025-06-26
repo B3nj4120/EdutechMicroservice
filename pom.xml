@@ -7,7 +7,7 @@
     <module>microservice-config</module>
     <module>microservice-eureka</module>
     <module>microservice-gateway</module>
-    <module>microservide-usuario</module>
+    <module>microservice-usuario</module>
   </modules>
 
   <parent>
