@@ -5,19 +5,19 @@ spring:
   application:
     name: msvc-usuario
   datasource:
-    drive-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/db_edutech_vm
-    username:root
-    password:
+    username: root
+    password: 
   jpa:
     hibernate:
       ddl-auto: update
     database: mysql
-    database-platrform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 eureka:
   instance:
     hostname: localhost
   client:
     service-url:
-      defaulrZone: http://localhost:8761/eureka 
+      defaultZone: http://localhost:8761/eureka

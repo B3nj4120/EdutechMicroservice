@@ -50,6 +50,6 @@ public class UsuarioService {
 
       // Validar si ya existe el email
       public boolean existByEmail(String email){
-        return usuarioRepository.existByEmail(email);
+        return usuarioRepository.existsByEmail(email);
       }
 }

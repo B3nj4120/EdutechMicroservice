@@ -35,5 +35,9 @@ public class Usuario {
     @NotBlank(message = "El rol es obligatorio")
     private String rol;
 
+    public Object getPassword() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
     
