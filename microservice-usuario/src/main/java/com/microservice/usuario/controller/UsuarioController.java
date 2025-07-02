@@ -5,51 +5,78 @@ import com.microservice.usuario.service.UsuarioService;
 import com.microservice.usuario.dto.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.http.*;
-import jakarta.validation.Valid;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
-import java.util.*;
-import java.time.LocalDateTime;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
+import org.springframework.hateoas.CollectionModel;
+
+import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RestController
-@RequestMapping("/api/v1/usuarios") 
+@RequestMapping("/api/v1/usuarios")
 public class UsuarioController {
 
-   @Autowired
+    @Autowired
     private UsuarioService usuarioService;
 
+   /**
+ * @return
+ */
     @GetMapping("/listar")
-    public List<Usuario> getAllUsers() {
-        return usuarioService.findAll();
+    public CollectionModel<EntityModel<UsuarioDTO>> getAllUsers() {
+        List<Object> usuarios = usuarioService.findAll().stream()
+            .map(u -> extracted(u))
+            .toList();
+
+         return CollectionModel.of(usuarios,
+                linkTo(methodOn(UsuarioController.class).getAllUsers()).withSelfRel());
     }
 
+   private Object extracted(Usuario u) {
+    UsuarioDTO dto = new UsuarioDTO(u.getId(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRol());
+        return EntityModel.of(dto,
+         linkTo(methodOn(UsuarioController.class).getUserById(u.getId())).withSelfRel()
+    );
+   }
+
     @GetMapping("/{id_usuario}")
-    public ResponseEntity<?> getUserById(@PathVariable Integer id_usuario) {
-        Optional<Usuario> usuario = usuarioService.findById(id_usuario);
+        public ResponseEntity<?> getUserById(@PathVariable Integer id_usuario) {
+            Optional<Usuario> usuario = usuarioService.findById(id_usuario);
 
-        if (usuario.isPresent()) {
-            Usuario u = usuario.get();
-            UsuarioDTO dto = new UsuarioDTO();
-            dto.setId(u.getId());
-            dto.setUsername(u.getUsername());
-            dto.setPassword(u.getPassword());
-            dto.setEmail(u.getEmail());
-            dto.setRol(u.getRol());
+            if (usuario.isPresent()) {
+                Usuario u = usuario.get();
+                UsuarioDTO dto = new UsuarioDTO(u.getId(), u.getUsername(), u.getPassword(), u.getEmail(), u.getRol());
 
-            return ResponseEntity.ok()
-                    .header("mi-encabezado", "valor")
-                    .body(dto);
-        } else {
-            Map<String, String> errorBody = new HashMap<>();
-            errorBody.put("message", "No se encontró el usuario con ese ID: " + id_usuario);
-            errorBody.put("status", "404");
-            errorBody.put("timestamp", LocalDateTime.now().toString());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
-        }
+                EntityModel<UsuarioDTO> resource = EntityModel.of(dto);
+                 resource.add(((Object) linkTo(methodOn(UsuarioController.class).getUserById(id_usuario))).withSelfRel());
+                 resource.add(((Object) linkTo(methodOn(UsuarioController.class).getAllUsers())).withRel("usuarios"));
+
+             return ResponseEntity.ok(resource);
+            } else {
+                     Map<String, String> errorBody = new HashMap<>();
+                    errorBody.put("message", "No se encontró el usuario con ese ID: " + id_usuario);
+                    errorBody.put("status", "404");
+                     errorBody.put("timestamp", LocalDateTime.now().toString());
+                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody);
+             }
+}   
+
+    private Object linkTo(com.microservice.usuario.controller.CollectionModel<com.microservice.usuario.controller.EntityModel<UsuarioDTO>> userById) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'linkTo'");
+    }
+
+    private UsuarioController methodOn(Class<UsuarioController> class1) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'methodOn'");
     }
 
     @PostMapping
@@ -63,7 +90,7 @@ public class UsuarioController {
 
             Usuario guardado = usuarioService.save(usuario);
 
-            UsuarioDTO responseDTO = new UsuarioDTO();
+            UsuarioDTO responseDTO = new UsuarioDTO(0, "benja", "123", "benja@mail.com", "ADMIN");
             responseDTO.setId(guardado.getId());
             responseDTO.setUsername(guardado.getUsername());
             responseDTO.setPassword(guardado.getPassword());
@@ -97,7 +124,7 @@ public class UsuarioController {
 
             Usuario actualizado = usuarioService.save(usuario);
 
-            UsuarioDTO responseDTO = new UsuarioDTO();
+            UsuarioDTO responseDTO = new UsuarioDTO(0, "benja", "123", "benja@mail.com", "ADMIN");
             responseDTO.setId(actualizado.getId());
             responseDTO.setUsername(actualizado.getUsername());
             responseDTO.setPassword(actualizado.getPassword());

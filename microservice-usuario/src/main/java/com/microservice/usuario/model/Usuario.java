@@ -1,8 +1,13 @@
 package com.microservice.usuario.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "usuarios")
@@ -12,9 +17,13 @@ import lombok.*;
 @AllArgsConstructor
 public class Usuario {
 
-     @Id
+    public static Object builder() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+   @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "username", unique = true, nullable = false, length = 50)
     @NotBlank(message = "El nombre de usuario es obligatorio")
@@ -35,9 +44,8 @@ public class Usuario {
     @NotBlank(message = "El rol es obligatorio")
     private String rol;
 
-    public Object getPassword() {
+    public Object getUsername() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
     
