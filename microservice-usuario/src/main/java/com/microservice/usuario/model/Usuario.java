@@ -12,40 +12,50 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "usuarios")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
-
-    public static Object builder() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "username", unique = true, nullable = false, length = 50)
-    @NotBlank(message = "El nombre de usuario es obligatorio")
-    @Size(min = 4, max = 50, message = "El nombre de usuario debe tener entre 4 y 50 caracteres")
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NotBlank(message = "La contraseña es obligatoria")
-    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
 
     @Column(name = "email", nullable = false, unique = true)
-    @NotBlank(message = "El correo es obligatorio")
-    @Email(message = "El formato del correo no es válido")
     private String email;
 
     @Column(name = "rol", nullable = false)
-    @NotBlank(message = "El rol es obligatorio")
     private String rol;
 
-    public Object getUsername() {
+    public static Object builder() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'builder'");
+    }
+
+    public void setId(int id_usuario) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    public void setUsername(String username) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setPassword(String password) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setEmail(String email) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public void setRol(String rol) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }
     

@@ -33,14 +33,13 @@ public class UsuarioControllerTest {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     private Usuario getDemoUsuario() {
-     return Usuario.builder()
-            .id(1)
+    return Usuario.builder()
             .username("benja")
             .password("123")
             .email("benja@mail.com")
             .rol("ADMIN")
             .build();
-    }
+}
 
     @Test
     void testGetAllUsers() throws Exception {

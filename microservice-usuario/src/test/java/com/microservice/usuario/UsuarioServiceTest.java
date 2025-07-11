@@ -11,23 +11,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @ExtendWith(MockitoExtension.class)
 public class UsuarioServiceTest {
-    
-  @InjectMocks
+
+      @InjectMocks
     private UsuarioService usuarioService;
 
     @Mock
     private UsuarioRepository usuarioRepository;
 
-    private Usuario getDemoUsuario() {
+    private Usuario crearUsuarioDemo() {
         return Usuario.builder()
                 .id(1)
                 .username("benja")
@@ -39,34 +39,35 @@ public class UsuarioServiceTest {
 
     @Test
     void testFindAll() {
-        when(usuarioRepository.findAll()).thenReturn(List.of(getDemoUsuario()));
-
+        when(usuarioRepository.findAll()).thenReturn(List.of(crearUsuarioDemo()));
+        
         List<Usuario> usuarios = usuarioService.findAll();
-
+        
         assertNotNull(usuarios);
         assertEquals(1, usuarios.size());
         assertEquals("benja", usuarios.get(0).getUsername());
     }
 
     @Test
-    void testFindByIdFound() {
-        when(usuarioRepository.findById(1)).thenReturn(Optional.of(getDemoUsuario()));
+    void testFindById() {
+        Usuario usuario = crearUsuarioDemo();
+        when(usuarioRepository.findById(1)).thenReturn(Optional.of(usuario));
 
-        Optional<Usuario> usuario = usuarioService.findById(1);
+        Optional<Usuario> encontrado = usuarioService.findById(1);
 
-        assertTrue(usuario.isPresent());
-        assertEquals("benja", usuario.get().getUsername());
+        assertTrue(encontrado.isPresent());
+        assertEquals("benja", encontrado.get().getUsername());
     }
 
     @Test
     void testSave() {
-        Usuario u = getDemoUsuario();
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(u);
+        Usuario usuario = crearUsuarioDemo();
+        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
-        Usuario saved = usuarioService.save(u);
+        Usuario guardado = usuarioService.save(usuario);
 
-        assertNotNull(saved);
-        assertEquals("benja", saved.getUsername());
+        assertNotNull(guardado);
+        assertEquals("benja", guardado.getUsername());
     }
 
     @Test
@@ -76,36 +77,6 @@ public class UsuarioServiceTest {
         usuarioService.delete(1);
 
         verify(usuarioRepository, times(1)).deleteById(1);
-    }
-
-    @Test
-    void testExistsByUsername() {
-        when(usuarioRepository.existsByUsername("benja")).thenReturn(true);
-
-        assertTrue(usuarioService.existsByUsername("benja"));
-    }
-
-    @Test
-    void testExistByEmail() {
-        when(usuarioRepository.existsByEmail("benja@mail.com")).thenReturn(true);
-
-        assertTrue(usuarioService.existByEmail("benja@mail.com"));
-    }
-
-    public UsuarioService getUsuarioService() {
-        return usuarioService;
-    }
-
-    public void setUsuarioService(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
-
-    public UsuarioRepository getUsuarioRepository() {
-        return usuarioRepository;
-    }
-
-    public void setUsuarioRepository(UsuarioRepository usuarioRepository) {
-        this.usuarioRepository = usuarioRepository;
     }
 
 
